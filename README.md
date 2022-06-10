@@ -166,7 +166,7 @@ Other projects approach high luminance resolution for psychophysical experiments
 
 * *Psychopy* (Python 3) provides high-resolution luminance modes *bits++* and *color++* for monitors by Cambride Research Technologies.
 * *PsychToolBox* (MATLAB) supports different high-resolution luminance monitors, including the ViewPixx. 
-* *[HRL](https://github.com/computational-psychology/hrl)* (Python 2) is a minimalistic library for high-resolution luminance experiments without psychopy but with ViewPixx support. 
+* *[HRL](https://github.com/computational-psychology/hrl)* (Python 2) is a numpy-based library for high-resolution luminance experiments without psychopy, supporting the ViewPixx monitor. 
 
 ## Acknowledgements
 
