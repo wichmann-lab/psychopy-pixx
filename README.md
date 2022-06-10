@@ -71,9 +71,11 @@ The second measurement, after linearization, shows a linear relation between gre
 
 #### Luminance resolution
 Besides luminance linearity, we are also interested in the luminance resolution--how many different grey levels the monitor can show. A standard monitor uses 8-bit pixel data and can show up to 256 different shades of grey, while our Viewpixx in high luminance-resolution mode (*M16*) uses 16-bit data and thus up to 65.536 grey levels. In practice, the resolution is lower and can be measured by the luminance of tiny grey level differences. 
-The just measurable luminance difference describes our resolution; here we see 11-bit (about 2.000 grey levels) for some grey levels and even more for others. 
+The just measurable luminance difference describes our resolution; here we see 11-bit (about 2.000 grey levels) for some grey levels and even more for others. For every line, we picked a base-level $x_0$ and add tiny but increasing differences, $x_i = x_0 + 2^-i$. Then we measured the base luminance $lum(x_0)$ and luminances $lum(x_{14})$ to $lum(x_6)$. The plot shows the grey level difference $i$ againt the the luminance increase $lum(x_i) - lum(x_0)$. Linearized luminance should show line in the log-log-plot for a reasonable offset. 
+
 
 ![Plot of luminance difference per tiny grey level difference](images/example_resolution.png)
+
 ## Devices
 The following classes extend psychopy to access VPixx Technologies' ViewPixx monitor and ResponsePixx button-boxes.
 Short examples show how to get started in Psychopy's **Coder** and **Builder** with [Code Components](https://www.psychopy.org/builder/components/code.html). 
