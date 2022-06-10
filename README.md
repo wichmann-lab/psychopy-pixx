@@ -29,7 +29,7 @@ The default calibration tools of psychopy do not enable us to take advantage of 
 * Measure luminances in ViewPixx's high-luminance resolution mode (*M16*)
 * Store measurements and monitor state with Psychopy's monitor tool. 
 * Linearize luminances with interpolation instead of Gamma-functions, because (our ViewPixx's) measurements do not follow a power function. 
-* Provide CLUT with high-luminance resolution in the rendering shader without affecting the ViewPixx's register CLUT. 
+* 16-bit CLUT in the rendering shader w/o changing the ViewPixx's hardware CLUT. 
 
 ### Configure the monitor
 Our tools use Psychopy's monitor management to store the calibration. 
