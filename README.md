@@ -1,6 +1,6 @@
 # Psychopy-Pixx
 
-Python 3 toolbox for psychophysical experiments with high-luminance resolution in the Wichmann Lab.
+Python 3 toolbox for psychophysical experiments with high luminance resolution in the Wichmann Lab.
 This toolbox provides utilities for high-resolution gamma linearization (LUT-based) and Psychopy interfaces for ViewPixx and ResponsePixx devices (VPixx Technologies).
 
 Typical monitors support 256 different luminance levels (8-bit), but the human visual system can discriminate many more. 
