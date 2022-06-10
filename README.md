@@ -54,7 +54,7 @@ pixxcalibrate -m ViewPixx -s 1 -p S470 --measures 5 --levels 256 --levelspost 12
 #### Full measurement
 
 Use more measurements per grey level and especially grey levels for an extensive calibration, which takes several hours.
-"`sh
+```sh
 pixxcalibrate -m ViewPixx -s 1 -p S470 --measures 250 --levels 4096 --levelspost 2056 --restests 10 --plot --random
 ```
 
@@ -83,12 +83,13 @@ Short examples show how to get started in Psychopy's **Coder** and **Builder** w
 The ViewPixx class patches Psychopy's window rendering for the ViewPixx high luminance-resolution video modes and simplifies hardware interaction. Supported video modes are:
 
 * `mode='C24'`:  8-bit color mode (default).
-* `mode='M16": 16-bit grayscale mode (merges red and green input channels).
+* `mode='M16': 16-bit grayscale mode (merges red and green input channels).
 * `mode='C48'`: 16-bit color mode (merges two input pixels).
 
 The high-bit modes require high-resolution luminance linearization, not provided by Psychopy.
 First, disable Psychopy's gamma-linearization (`Window(gamma=1)`),  then use our interpolation-based linearization. The linearization requires the luminance measurements from the monitor's current calibration file. Additionally, our linearization function asserts that the monitor's current state equals the state during calibration and throws an error otherwise. 
-"`python
+
+```python
 from psychopy import visual
 from psychoy_pixx.devices import ViewPixx
 
@@ -112,7 +113,7 @@ The first argument should be the *pypixxlib* device to which the Responsepixx is
 The following example illuminates the red and green buttons during the experiment and stops the trial routine if the observer pushes the red or green button.
 The button and the time since the routine started is stored in the result file.
 
-"`python
+```python
 from psychoy_pixx.devices import ViewPixx, ResponsePixx
 
 ## Begin Experiment
