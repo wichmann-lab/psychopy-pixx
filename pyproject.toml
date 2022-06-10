@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "psychopy-pixx"
+version = "0.1.0"
+description = "Psychopy add-on for high-bit luminance and VPixx devices"
+authors = ["David-Elias Kuenstle <david-elias.kuenstle@uni-tuebingen.de>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+click = "^8.1.3"
+
+[tool.poetry.dev-dependencies]
+
+[tool.poetry.scripts]
+pixxcalibrate = "psychopy_pixx.calibration.calibration:calibration_routine_cli"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
