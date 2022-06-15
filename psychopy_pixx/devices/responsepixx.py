@@ -14,6 +14,7 @@ class ResponsePixx:
         self._old_state = None
         self.watch_buttons = buttons
         self.watch_events = events
+        self._pixxdevice = device
         
         self._pixxdevice.din.setBitDirection(0x1F0000)  # enable output pins for lights
         if lights is True:
