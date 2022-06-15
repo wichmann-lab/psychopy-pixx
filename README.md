@@ -92,6 +92,7 @@ The high-bit modes require high-resolution luminance linearization, not provided
 First, disable Psychopy's gamma-linearization (`Window(gamma=1)`),  then use our interpolation-based linearization. The linearization requires the luminance measurements from the monitor's current calibration file. Additionally, our linearization function asserts that the monitor's current state equals the state during calibration and throws an error otherwise. 
 
 ```python
+# Before Experiment
 from psychopy import visual
 from psychoy_pixx.devices import ViewPixx
 
@@ -116,14 +117,12 @@ The following example illuminates the red and green buttons during the experimen
 The button and the time since the routine started is stored in the result file.
 
 ```python
+## Before Experiment
 from psychoy_pixx.devices import ViewPixx, ResponsePixx
 
 ## Begin Experiment
-vpixx = ViewPixx(win)
+# init the vpixx as described above, then
 pixxdevice = vpixx._pixxdevice
-# alternative: 
-# from pypixxlib.viewpixx import VIEWPixx 
-# pixxdevice = VIEWPixx() 
 buttonbox = ResponsePixx(pixxdevice, buttons=['red', 'green'], 
                          events=['down'], lights=True)
 
@@ -138,7 +137,7 @@ if len(resp) > 0:
 
 ## End Routine
 buttonbox.stop()
-trials.addData('resp.key', last_resp['name'])
+trials.addData('resp.key', last_resp['name'])  # replace trials by the routine's name
 trials.addData('resp.rt', last_resp['time'])
 ```
 
