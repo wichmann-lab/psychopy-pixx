@@ -193,6 +193,7 @@ def calibration_routine_cli(levels, monitor, screen, photometer, port, random, l
     monitor.setLineariseMethod(3)  # interpolation
     monitor.setLumsPre(lumsPre)
     monitor.setLevelsPre(levelsPre)
+    monitor.setGamma(1)  # disable psychopy gamma correction
     monitor.currentCalib['viewpixx'] = {
         'name': vpixx._pixxdevice.getName(),
         'info': vpixx._pixxdevice.getInfo(),
