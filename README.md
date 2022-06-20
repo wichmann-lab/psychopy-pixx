@@ -15,12 +15,26 @@ proprietary software for VPixx Technology devices, require a manual installation
 1. *(optional but recommended)* Create and activate a Conda environment with python 3.8.
 
     `conda create -n 'psychopy' python='3.8'; conda activate psychopy`
-2. Install [psychopy](https://www.psychopy.org/download.html).
+2. Install [psychopy](https://www.psychopy.org/download.html) in the environment.
+    
+    On some systems Psychopy doesn't work out-of-the-box but requires additional (system) packages. 
+    This works for us (Debian+KDE):
+    ```sh
+    pip install psychtoolbox==3.0.16
+    pip install wxpython
+    pip install PyQt5
+    apt-get install swig
+    pip install psychopy
+    ```
 3. Install and start the VPixx system service (proprietary software by VPixx Technologies).
-4. Install [pypixxlib](https://www.vpixx.com/manuals/python/html/gettingStartd.html) (proprietary software by VPixx Technologies; tested with version 3.11).
-5. Install this toolbox and the remaining dependencies with pip.
+    
+    This is system dependend, please ask your sys admin. Some systems start the service automatically, butn our lab the user calls the custom command `set-psychopy-mode` after every login. 
+4. Install [pypixxlib](https://www.vpixx.com/manuals/python/html/gettingStartd.html) (proprietary software by VPixx Technologies; tested with version 3.11) in the environment. `pypixxlib.tar.gz` is bundled with the other VPixx software and should be available to every VPixx customer.
 
-    `pip install git+https://github.com/wichmann-lab/psychopy-pixx.git`
+    `pip3 install -U  PATH_TO_FILE/VPixx\ Software\ Tools/Software\ Tools/pypixxlib/pypixxlib.tar.gz`
+5. Install this toolbox and the remaining dependencies with pip in the environment.
+
+    `pip3 install git+https://github.com/wichmann-lab/psychopy-pixx.git`
 
 ## Calibration
 
@@ -182,5 +196,7 @@ David-Elias Künstle.
 
 ## Author and License 
 This toolbox was initiated by David-Elias Künstle <david-elias.kuenstle AT uni-tuebingen.de> for Felix A. Wichmann's Neural Information Processing lab.
+
+The author and this project are not affiliated with VPixx Technologies.
 
 This toolbox is free software under the conditions of the [GNU Lesser General Public License v3+](http://www.gnu.de/documents/lgpl-3.0.en.html). This license means you are free to use this toolbox in your project without restrictions if you give prominent notice, but if you modify or copy the source code, this modification has to become free software, too. 
