@@ -28,7 +28,7 @@ proprietary software for VPixx Technology devices, require a manual installation
     ```
 3. Install and start the VPixx system service (proprietary software by VPixx Technologies).
     
-    This is system dependend, please ask your sys admin. Some systems start the service automatically, butn our lab the user calls the custom command `set-psychopy-mode` after every login. 
+    This is system dependend, please ask your sys admin. Some systems start the service automatically, but in our lab the user calls `set-psychopy-mode` (a custom command) after every login. 
 4. Install [pypixxlib](https://www.vpixx.com/manuals/python/html/gettingStartd.html) (proprietary software by VPixx Technologies; tested with version 3.11) in the environment. `pypixxlib.tar.gz` is bundled with the other VPixx software and should be available to every VPixx customer.
 
     `pip3 install -U  PATH_TO_FILE/VPixx\ Software\ Tools/Software\ Tools/pypixxlib/pypixxlib.tar.gz`
