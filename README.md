@@ -20,10 +20,10 @@ proprietary software for VPixx Technology devices, require a manual installation
     On some systems Psychopy doesn't work out-of-the-box but requires additional (system) packages. 
     This works for us (Debian+KDE):
     ```sh
+    # on some systems: sudo apt-get install swig 
     pip install psychtoolbox==3.0.16
     pip install wxpython
     pip install PyQt5
-    apt-get install swig
     pip install psychopy
     ```
 3. Install and start the VPixx system service (proprietary software by VPixx Technologies).
