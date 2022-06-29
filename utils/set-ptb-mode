@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+# 2022 David-Elias Kuenstle <david-elias.kuenstle@uni-tuebingen.de>
+#
+# SETUP LAB COMPUTER WITH PSYCHTOOLBOX
+# * add ptb xorg config (from backup)
+# * stop vpixx service
+
+PTB_XORG='/etc/X11/xorg.conf.d/90-ptbxorg.conf'
+PTB_XORG_BACKUP='/etc/X11/xorg.conf.d/backup-selections/90-ptbxorg.conf'
+SERVICE='/usr/sbin/service'
+VPIXX_SERVICE='vpixx-device-server'
+NEED_LOGOUT=0
+
+echo "setup the lab computer to use with psychtoolbox."
+if test -f "$PTB_XORG"; then
+    echo "* ptb xorg config found"
+else
+    echo "* add PTB xorg config"
+    if test -f "$PTB_XORG_BACKUP"; then
+        cp "$PTB_XORG_BACKUP" "$PTB_XORG"
+        chmod 660 "$PTB_XORG"
+        chgrp psychtoolbox "$PTB_XORG"
+        NEED_LOGOUT=1
+    else
+        echo "XXX cannot add xorg config, expects backup at $PTB_XORG_BACKUP" >&2
+        exit 1
+    fi
+fi
+
+if [[ $($SERVICE $VPIXX_SERVICE status) == *"Active: active (running)"* ]]; then
+    echo "* stop vpixx service"
+    sudo $SERVICE $VPIXX_SERVICE stop
+else
+    echo "* vpixx service is stopped"
+fi
+
+if [ "$NEED_LOGOUT" -eq "1" ]; then
+    echo "now, please logout and login to finish the setup."
+else
+    echo "all setup for psychtoolbox"
+fi

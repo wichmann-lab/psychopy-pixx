@@ -1,0 +1,11 @@
+#
+# This file MUST be edited with the 'visudo' command as root.
+# (will be done after the sudoer file one level above)
+# Please consider adding local content in /etc/sudoers.d/ instead of
+# directly modifying this file.
+#
+# See the man page for details on how to write a sudoers file.
+#
+%psychtoolbox	ALL=NOPASSWD: /usr/sbin/service vpixx-device-server status
+%psychtoolbox	ALL=NOPASSWD: /usr/sbin/service vpixx-device-server stop
+%psychtoolbox	ALL=NOPASSWD: /usr/sbin/service vpixx-device-server start

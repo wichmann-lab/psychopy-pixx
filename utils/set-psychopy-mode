@@ -1,0 +1,40 @@
+#!/bin/bash
+#
+# 2022 David-Elias Kuenstle <david-elias.kuenstle@uni-tuebingen.de>
+#
+# SETUP LAB COMPUTER WITH PSYCHOPY
+# * remove ptb xorg config (if backup exists)
+# * enable vpixx service
+
+PTB_XORG='/etc/X11/xorg.conf.d/90-ptbxorg.conf'
+PTB_XORG_BACKUP='/etc/X11/xorg.conf.d/backup-selections/90-ptbxorg.conf'
+VPIXX_SERVICE='vpixx-device-server'
+SERVICE='/usr/sbin/service'
+NEED_LOGOUT=0
+
+echo "Setup the lab computer to use with psychopy."
+if test -f "$PTB_XORG"; then
+    echo "* remove PTB xorg config"
+    if test -f "$PTB_XORG_BACKUP"; then
+        rm "$PTB_XORG"
+        NEED_LOGOUT=1
+    else
+        echo "XXX cannot remove, expects backup at $PTB_XORG_BACKUP" >&2
+        exit 1
+    fi
+else
+    echo "* ptb xorg config already removed"
+fi
+
+if [[ $($SERVICE $VPIXX_SERVICE status) == *"Active: active (running)"* ]]; then
+    echo "* vpixx service already running"
+else
+    echo "* start vpixx service"
+    sudo $SERVICE $VPIXX_SERVICE start
+fi
+
+if [ "$NEED_LOGOUT" -eq "1" ]; then
+    echo "now, please logout and login to finish the setup."
+else
+    echo "all setup for psychopy."
+fi
