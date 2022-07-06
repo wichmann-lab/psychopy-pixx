@@ -114,6 +114,7 @@ class ResponsePixx:
                            if name in self.watch_buttons
                            and state in self.watch_events
                            and state != self._old_state[name]]
+        self._old_state = new_state
         return events
 
     def waitKeys(self, maxWait=float('inf'), clear=True):
