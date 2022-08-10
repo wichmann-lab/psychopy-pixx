@@ -237,11 +237,11 @@ def interp_clut(monitor):
     if not np.all(np.diff(levels) >= 0):
         raise ValueError(f"Expects levels to be increasing, got decreases.")
     if np.all(levels[0] != 0):
-        raise ValueError(f"Expects levels starting with 0, got {levels[:, 0]}")
+        raise ValueError(f"Expects levels starting with 0, got {levels[0]}")
     if np.all(levels[-1] == 255):
         levels = levels / 255
     elif np.any(levels[-1] != 1):
-        raise ValueError(f"Expects levels ending with 1.0 or 255, got {levels[:, -1]}")
+        raise ValueError(f"Expects levels ending with 1.0 or 255, got {levels[-1]}")
     
     nguns = lums.shape[0]
     desired_lums = np.linspace(0, 1, 2**16, endpoint=True)
