@@ -11,6 +11,7 @@ Note: This class will be integrated in a future psychopy version
 https://github.com/psychopy/psychopy/pull/4680
 """
 import sys
+import numpy as np
 
 try:
     import serial
@@ -69,9 +70,24 @@ class S470(object):
             msg = f"I don't know how to handle serial ports on {sys.platform}"
             raise IOError(msg)
         self.OK = True  # required by psychopy
+        
+        self.channel_range = self.write_line('RNG 6')  # channel's DC range 10^6
+        self.readings_per_second = self.write_line('SRT 250')  # 250 readings per second (max)
 
+    def write_line(self, txt):
+        """ Write a command and return the response.
+        
+        Device always responds <CR> <LF> value <CR> <LF>
+        """
+        self.com.write(f'{txt}{self.terminator}'.encode())
+        
+        first_line = self.read_line()
+        assert first_line == "", f"Expect empty line message, got '{first_line.encode()}'."
+        return self.read_line()
+        
     def read_line(self) -> str:
-        """ Read a line from the serial port."""
+        """ Read a line from the serial port and return without the terminator.
+        """
         line = self.com.read_until(expected=self.terminator.encode()).decode()
         if line.endswith(self.terminator):
             return line[:-len(self.terminator)]
@@ -83,29 +99,30 @@ class S470(object):
         """ Measure luminances from the serial port."""
         n_measures = int(n_measures)
         if n_measures > 1:
-            self.com.write(f'REA {n_measures:d}{self.terminator}'.encode())
+            first_lum = self.write_line(f'REA {n_measures:d}')
         elif n_measures == 1:
-            self.com.write(f'REA{self.terminator}'.encode())
-        else: # negative numbers would result in infinite measures.
+            first_lum = self.write_line('REA')
+        else: # negative numbers would result in infinite measures; avoid it.
             raise ValueError(f"Expect n_measures as positive integer, got {n_measures}.")
 
-        first_line = self.read_line()
-        assert first_line == "", f"Expect empty line message, got '{first_line.encode()}'."
-        lums = []
-        for i in range(n_measures):
+        lums = [float(first_lum)]
+        for i in range(n_measures - 1):
             msg = self.read_line()
             lums.append(float(msg))
         return lums
 
-    def getLum(self) -> float:
+    def getLum(self, return_std=False) -> float:
         """ Return the average luminance of repeated measures. 
         The number of repetitions is controlled by .n_repeat.
         The returned luminance is set to .lastLum.
         This method is required by psychopy.
         """
         lums = self.measure(self.n_repeat)
-        self.lastLum = sum(lums) / len(lums)
-        return self.lastLum
+        self.lastLum = np.mean(lums)
+        if return_std:
+            return self.lastLum, np.std(lums)
+        else:
+            return self.lastLum
 
     def __del__(self):
         self.com.close()
