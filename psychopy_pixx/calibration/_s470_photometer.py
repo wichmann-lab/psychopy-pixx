@@ -71,6 +71,9 @@ class S470(object):
             raise IOError(msg)
         self.OK = True  # required by psychopy
         
+        self.channel_range = self.write_line('RNG 6')  # channel's DC range 10^6
+        self.readings_per_second = self.write_line('SRT 250')  # 250 readings per second (max)
+
     def write_line(self, txt):
         """ Write a command and return the response.
         
