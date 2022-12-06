@@ -131,7 +131,7 @@ The following example illuminates the red and green buttons during the experimen
 
 ```python
 ## Before Experiment
-from psychopy_pixx.devices import ViewPixx, ResponsePixx
+from psychopy_pixx.devices import ResponsePixx
 
 ## Begin Experiment
 # either get the pixxdevice from the psychopy_pixx' ViewPixx object (see above)
