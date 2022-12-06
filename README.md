@@ -128,31 +128,36 @@ vpixx.use_calibration_register()  # now wait for 20-30 minutes!
 This ResponsePixx class provides a high-level interface to access button events. 
 The first argument should be the *pypixxlib* device to which the Responsepixx is connected. Typically, this is a [DATAPixx](https://www.vpixx.com/manuals/python/html/dataPixx.html) or, as in our case, a [VIEWPixx](https://www.vpixx.com/manuals/python/html/viewPixx.html) instance. 
 The following example illuminates the red and green buttons during the experiment and stops the trial routine if the observer pushes the red or green button.
-The button and the time since the routine started is stored in the result file.
 
 ```python
 ## Before Experiment
-from psychoy_pixx.devices import ViewPixx, ResponsePixx
+from psychopy_pixx.devices import ViewPixx, ResponsePixx
 
 ## Begin Experiment
-# init the vpixx as described above, then
+# either get the pixxdevice from the psychopy_pixx' ViewPixx object (see above)
 pixxdevice = vpixx._pixxdevice
+# or initialize your own:
+from pypixxlib.viewpixx import VIEWPixx
+pixxdevice = VIEWPixx()
+# then initalize the button box
 buttonbox = ResponsePixx(pixxdevice, buttons=['red', 'green'], 
                          events=['down'], lights=True)
+
+# the following part can be used in multiple routines
 
 ## Begin Routine:
 buttonbox.start()
 
 ## Every Frame
 resp = buttonbox.getKeys()
-if len(resp) > 0:
+if len(resp) > 0:  # stop the routine after a button push
     last_resp = resp[-1]
     continueRoutine = False
 
 ## End Routine
 buttonbox.stop()
-trials.addData('resp.key', last_resp['name'])  # replace trials by the routine's name
-trials.addData('resp.rt', last_resp['time'])
+currentLoop.addData('resp.key', last_resp['name'])
+currentLoop.addData('resp.rt', last_resp['time'])
 ```
 
 Please note that time in the events is relative to the *start* call and measured with the clock in the Viewpixx device, and there is no sync between this device clock and the frames shown by psychopy. Be careful if you rely on exact time measurements because both clocks *could* deviate during long routines. 
