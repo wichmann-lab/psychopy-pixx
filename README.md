@@ -1,5 +1,7 @@
 # Psychopy-Pixx
 
+[![PyPI version](https://img.shields.io/pypi/v/psychopy-pixx.svg)](https://pypi.python.org/pypi/psychopy-pixx)
+
 Python 3 toolbox for psychophysical experiments with high luminance resolution in the Wichmann Lab.
 This toolbox provides utilities for high-resolution gamma linearization (LUT-based) and Psychopy interfaces for ViewPixx and ResponsePixx devices (VPixx Technologies).
 
@@ -7,34 +9,28 @@ Typical monitors support 256 different luminance levels (8-bit), but the human v
 In psychophysical experiments, we use special monitors like the ViewPixx with several thousand grey levels. 
 This high-bit luminance mode requires features currently not included in Psychopy, e.g. proprietary device communication, rearranged graphics output, and 16-bit luminance linearization.
 
-## Setup
+## Installation
 
-This toolbox comes as an easy to install python package. However, the key dependencies, Psychopy and 
-proprietary software for VPixx Technology devices, require a manual installation: 
+The easiest way to install *psychopy-pixx* is the Psychopy Plugin Manager (from Psychopy v2023.1.0). 
+In Psychopy, click on `Tools > Plugins`, the search *psychopy-pixx* and click `install`. 
 
-1. *(optional but recommended)* Create and activate a Conda environment with python 3.8.
+Afterwards, assure that `pypixxlib`, a proprietary library that comes with your VPixx Technology devices is installed to the same python environment (see below).
 
-    `conda create -n 'psychopy' python='3.8'; conda activate psychopy`
-2. Install [psychopy](https://www.psychopy.org/download.html) in the environment.
-    
-    On some systems Psychopy doesn't work out-of-the-box but requires additional (system) packages. 
-    This works for us (Debian+KDE):
-    ```sh
-    # on some systems: sudo apt-get install swig 
-    pip install psychtoolbox==3.0.16
-    pip install wxpython
-    pip install PyQt5
-    pip install psychopy
-    ```
-3. Install and start the VPixx system service (proprietary software by VPixx Technologies).
+## Manual setup
+
+If you prefer setting up* psychopy-pixx* without the plugin manager, you can install `psychopy-pixx` as a python package yourself.
+In addition, some proprietary software for VPixx Technology devices require a manual installation.
+
+1. Install psychopy
+2. Install and start the VPixx system service (proprietary software by VPixx Technologies).
     
     This is system dependend, please ask your sys admin. Some systems start the service automatically, but in our lab the user calls `set-psychopy-mode` (a custom command) after every login. You can find this utility script in [utils](https://github.com/wichmann-lab/psychopy-pixx/tree/main/utils).
-4. Install [pypixxlib](https://www.vpixx.com/manuals/python/html/gettingStartd.html) (proprietary software by VPixx Technologies; tested with version 3.11) in the environment. `pypixxlib.tar.gz` is bundled with the other VPixx software and should be available to every VPixx customer.
+3. Install [pypixxlib](https://www.vpixx.com/manuals/python/html/gettingStartd.html) (proprietary software by VPixx Technologies; tested with version 3.11) in the environment. `pypixxlib.tar.gz` is bundled with the other VPixx software and should be available to every VPixx customer.
 
     `pip3 install -U  PATH_TO_FILE/VPixx\ Software\ Tools/Software\ Tools/pypixxlib/pypixxlib.tar.gz`
-5. Install this toolbox and the remaining dependencies with pip in the environment.
+4. Install this toolbox and the remaining dependencies with pip in the environment.
 
-    `pip3 install git+https://github.com/wichmann-lab/psychopy-pixx.git`
+    `pip3 install psychopy-pixx`
 
 ## Calibration
 
