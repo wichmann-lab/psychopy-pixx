@@ -19,7 +19,6 @@ pixxcalibrate = "psychopy_pixx.calibration.calibration:calibration_routine_cli"
 [tool.poetry-dynamic-versioning]
 enable = true
 vcs = "git"
-style = "semver"
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
