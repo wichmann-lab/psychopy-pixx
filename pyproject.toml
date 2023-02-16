@@ -1,9 +1,11 @@
 [tool.poetry]
 name = "psychopy-pixx"
 version = "0.1.0"
-description = "Psychopy add-on for high-bit luminance and VPixx devices"
+description = "Psychopy plugin for high-bit luminance and VPixx devices"
+readme = "README.md"
+repository = "https://github.com/wichmann-lab/psychopy-pixx"
 authors = ["David-Elias Kuenstle <david-elias.kuenstle@uni-tuebingen.de>"]
-license = "MIT"
+license = "LGPL-3.0-or-later"
 
 [tool.poetry.dependencies]
 python = "^3.8"
