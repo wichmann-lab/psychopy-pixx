@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "psychopy-pixx"
-version = "0.1.0"
+version = "0.0.0"
 description = "Psychopy plugin for high-bit luminance and VPixx devices"
 readme = "README.md"
 repository = "https://github.com/wichmann-lab/psychopy-pixx"
@@ -16,6 +16,11 @@ click = "^8.1.3"
 [tool.poetry.scripts]
 pixxcalibrate = "psychopy_pixx.calibration.calibration:calibration_routine_cli"
 
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "semver"
+
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"
