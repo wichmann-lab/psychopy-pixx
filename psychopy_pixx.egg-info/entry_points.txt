@@ -1,0 +1,2 @@
+[psychopy.experiment.components]
+ResponsepixxComponent = components:ResponsepixxComponent
