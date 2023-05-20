@@ -1,2 +1,3 @@
 [psychopy.experiment.components]
 ResponsepixxComponent = components:ResponsepixxComponent
+ViewpixxComponent = components:ViewpixxComponent

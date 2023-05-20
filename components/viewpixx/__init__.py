@@ -46,7 +46,7 @@ class ViewpixxComponent(BaseComponent):
 
         # params
 
-        msg = _translate("Set to the wanted video mode")
+        msg = _translate("Set to the wanted video mode (do not use Psychopy's gamma linearization for M16 and C48)")
         self.params['vmode'] = Param(
             'M18', valType='str', inputType="choice", categ='Basic',
             allowedVals=['C24', 'M16', 'L48', 'C48'],
