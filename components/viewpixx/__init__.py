@@ -23,7 +23,7 @@ class ViewpixxComponent(BaseComponent):
     """
     categories = ['Responses']
     targets = ['PsychoPy']
-    iconFile = Path(__file__).parent / 'serial.png'
+    iconFile = Path(__file__).parent / 'viewpixx.png'
     tooltip = _translate('Viewpixx: Setup a Viewpixx')
     plugin = "psychopy-pixx"
     

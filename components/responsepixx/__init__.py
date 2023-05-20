@@ -27,7 +27,7 @@ class ResponsepixxComponent(BaseComponent):  # or (VisualComponent)
     """
     categories = ['Responses']
     targets = ['PsychoPy']
-    iconFile = Path(__file__).parent / 'mouse.png'
+    iconFile = Path(__file__).parent / 'responsepixx.png'
     tooltip = _translate('Responsepixx: Record Responsepixx buttonpresses')
     plugin = "psychopy-pixx"
     
