@@ -11,12 +11,13 @@ from pathlib import Path
 from psychopy.localization import _translate, _localized as __localized
 from psychopy.experiment.components import (BaseComponent, Param, getInitVals)
 
-_localized = __localized.copy()
+#_localized = __localized.copy()
 
 
-_localized.update({'vmode': _translate('video mode'),
+#_localized.update
+_localized = {'vmode': _translate('video mode'),
                    'scanBackLight': _translate('scanning back light'),
-                   })
+                   }
 
 class ViewpixxComponent(BaseComponent):  
     """A class for the viewpixx device
@@ -27,20 +28,20 @@ class ViewpixxComponent(BaseComponent):
     tooltip = _translate('Viewpixx: Setup a Viewpixx')
     plugin = "psychopy-pixx"
     
-    def __init__(self, exp, parentName, name='viewpixx',
-                 startType='time (s)', startVal=0.0,
-                 startEstim='', durationEstim='',
-                 stopType='duration (s)', stopVal=1.0):#, vmode='M18', scanBackLight=False):
+    def __init__(self, exp, parentName, name='viewpixx', vmode='M16', scanBackLight=False):
+                 #startType='time (s)', startVal=0.0,
+                 #startEstim='', durationEstim='',
+                 #stopType='duration (s)', stopVal=1.0):#, vmode='M18', scanBackLight=False):
         super(ViewpixxComponent, self).__init__(
-            exp, parentName, name=name,
-            startType=startType, startVal=startVal,
-            stopType=stopType, stopVal=stopVal,
-            startEstim=startEstim, durationEstim=durationEstim)
+            exp, parentName, name=name)
+            #startType=startType, startVal=startVal,
+            #stopType=stopType, stopVal=stopVal,
+            #startEstim=startEstim, durationEstim=durationEstim)
 
         self.type = 'Viewpixx'
         self.url = ""
 
-        self.order += [
+        self.order = [
             'vmode', 'scanBackLight',
             ]
 
