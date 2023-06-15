@@ -25,5 +25,7 @@ requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
 build-backend = "poetry_dynamic_versioning.backend"
 
 [tool.poetry.plugins."psychopy.experiment.components"]
-ResponsepixxComponent = "components:ResponsepixxComponent"
-ViewpixxComponent = "components:ViewpixxComponent"
+ResponsepixxComponent = "psychopy_pixx:ResponsepixxComponent"
+[tool.poetry.plugins."psychopy.experiment.routines"]
+ViewpixxSetupRoutine = "psychopy_pixx:ViewpixxSetupRoutine"
+

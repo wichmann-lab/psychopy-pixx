@@ -28,7 +28,7 @@ class ResponsepixxComponent(BaseComponent):  # or (VisualComponent)
     categories = ['Responses']
     targets = ['PsychoPy']
     iconFile = Path(__file__).parent / 'responsepixx.png'
-    tooltip = _translate('Responsepixx: Record Responsepixx buttonpresses')
+    tooltip = _translate('Responsepixx: Record Responsepixx buttonpresses (works only with Viewpixx routine beforehand)')
     plugin = "psychopy-pixx"
     
     def __init__(self, exp, parentName, name='responsepixx',
