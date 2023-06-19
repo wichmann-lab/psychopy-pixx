@@ -1,5 +1,0 @@
-components
-examples
-images
-psychopy_pixx
-utils

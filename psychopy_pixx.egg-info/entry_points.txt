@@ -1,4 +1,0 @@
-[psychopy.experiment.components]
-ResponsepixxComponent = psychopy_pixx:ResponsepixxComponent
-[psychopy.experiment.routines]
-ViewpixxSetupRoutine = psychopy_pixx:ViewpixxSetupRoutine

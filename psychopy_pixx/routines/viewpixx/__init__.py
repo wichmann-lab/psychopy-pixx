@@ -25,7 +25,7 @@ class ViewpixxSetupRoutine(BaseStandaloneRoutine):
     
     def __init__(self, exp, name='viewpixx', vmode='M16', scanBackLight=False, disabled=False):
         BaseStandaloneRoutine.__init__(self, exp, name = name, disabled=disabled)
-        self.url = ""
+        self.url = "https://github.com/wichmann-lab/psychopy-pixx#viewpixx-monitor"
 
         self.order += [
             'vmode', 'scanBackLight',

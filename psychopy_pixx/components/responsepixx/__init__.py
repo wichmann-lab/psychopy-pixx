@@ -44,7 +44,7 @@ class ResponsepixxComponent(BaseComponent):  # or (VisualComponent)
             startEstim=startEstim, durationEstim=durationEstim)
 
         self.type = 'Responsepixx'
-        self.url = ""
+        self.url = "https://github.com/wichmann-lab/psychopy-pixx#responsepixx-button-box"
 
         self.order += [
             'forceEndROutineOnPress', 'lights', 'red', 'green', 'yellow', 'blue', 'white',
