@@ -198,7 +198,7 @@ Button lights : bool
 
 * If this box is checked the lights of the valid buttons will be turned on
 
-_button color_ : bool
+_color button_ : bool
 
 * If a box is checked the correspondingly colored button is valid and will be recorded.
 
