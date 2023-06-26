@@ -5,8 +5,7 @@
 
 __all__ = ['ResponsepixxComponent']
 
-from os import path
-import json
+
 from pathlib import Path
 from psychopy.localization import _translate, _localized as __localized
 from psychopy.experiment.components import (BaseComponent, Param, getInitVals)

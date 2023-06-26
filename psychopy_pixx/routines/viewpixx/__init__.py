@@ -48,7 +48,6 @@ class ViewpixxSetupRoutine(BaseStandaloneRoutine):
             updates='constant',
             hint=msg,
             label=_translate('scanning back light'))
-        msg = _translate("Should the scanning back light be used?")
  
 
     def writeInitCode(self, buff):
