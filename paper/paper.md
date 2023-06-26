@@ -38,9 +38,9 @@ experiments that require precise color reproduction.
 
 # Statement of need
 
-`psychopy-pixx` is an Python package that extends PsychoPy [@Peirce:2007] for
+`psychopy-pixx` is an Python package that extends PsychoPy [@peirce2007psychopy] for
 vision experiments with VPixx Technologies hardware and highly-precise calibration routines.
-For vision experiments, there are mainly two software packages, `Psychtoolbox` in MATLAB and `Psychopy` in Python, and only a few hardware manufacturers.
+For vision experiments, there are mainly two software packages, `Psychtoolbox` [@brainard1997psychophysics; @pelli1997videotoolbox; @kleiner2007psychtoolbox3] in MATLAB and `Psychopy` in Python, and only a few hardware manufacturers.
 Due to the lack of support in `Psychopy`, users of VPixx hardware had to use their monitors, button boxes or beamers with the MATLAB solution, which requires a license, or create their own software, which is time-consuming and error-prone.
 As an official plugin for PsychoPy, `psychopy-pixx` is the first solution that
 is well integrated into the PsychoPy ecosystem. Our plugin can be installed
