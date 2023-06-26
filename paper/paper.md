@@ -37,26 +37,25 @@ that the stimuli are displayed correctly; this is especially important for
 experiments that require precise color reproduction.
 
 # Statement of need
-
-`psychopy-pixx` is an Python package that extends PsychoPy [@peirce2007psychopy] for
+`psychopy-pixx` is a Python package that extends PsychoPy [@peirce2007psychopy] for
 vision experiments with VPixx Technologies hardware and highly-precise calibration routines.
 For vision experiments, there are mainly two software packages, `Psychtoolbox` [@brainard1997psychophysics; @pelli1997videotoolbox; @kleiner2007psychtoolbox3] in MATLAB and `Psychopy` in Python, and only a few hardware manufacturers.
-Due to the lack of support in `Psychopy`, users of VPixx hardware had to use their monitors, button boxes or beamers with the MATLAB solution, which requires a license, or create their own software, which is time-consuming and error-prone.
+Due to the lack of support in `Psychopy`, users of VPixx hardware had to use their monitors, button boxes or beamers with the MATLAB solution, which requires a license, or create custom software, which is time-consuming and error-prone.
 As an official plugin for PsychoPy, `psychopy-pixx` is the first solution that
 is well integrated into the PsychoPy ecosystem. Our plugin can be installed
 from `Psychopy`'s plugin manager. It provides both graphical user interfaces (called "components")
-and a Python API for VPixx' monitor *ViewPixx* and button box *ResponsePixx*,
+and a Python API for VPixx monitor *ViewPixx* and button box *ResponsePixx*,
 where it exposes many hardware configurations.
-The open source nature of the plugin and its modular design allows the community to contribute to the project and extend it to other hardware like the *ProPixx* projector.
-Internally, `psychopy-pixx` uses the hardware manufacturers' own low-level API to maximize reliability;
-we support *ViewPixx*' 16-bit color resolution modes by replacing `Psychopy`'s graphic shader with a custom one that
+The open-source nature of the plugin and its modular design allows the community to contribute to the project and extend it to other hardware like the *ProPixx* projector.
+Internally, `psychopy-pixx` uses the hardware manufacturers' low-level API to maximize reliability;
+we support *ViewPixx* 16-bit color resolution modes by replacing `Psychopy`'s graphic shader with a custom one that
 encodes the 16-bit information in two 8-bit channels.
 
 In addition to the hardware support, `psychopy-pixx` also provides a calibration routine for the monitor
 and elevates the accuracy of `Psychopy`'s brightness linearisation to a new level.
-Calibration is necessary because different monitors do not display the same colour for the same pixel values, but in the experiments we need high control over the display;
-for convenience we want a linearised display in which twice the pixel value results in twice as bright a screen pixel.
-A calibration procedure uses a photometer to measure the displayed brightness of different pixel values and creates a conversion function from desired display to required pixel value.
+Calibration is necessary because different monitors do not display the same color for the same pixel values, but in the experiments, we need high control over the display;
+for convenience, we want a linearised display in which twice the pixel value results in twice as bright a screen pixel.
+A calibration procedure uses a photometer to measure the displayed brightness of different pixel values and creates a conversion function from desired display to the required pixel value.
 The procedure in `Psychopy` uses relatively few measurements to fit as a transfer function using an exponential function.
 However, since the brightness of LCD monitors such as the ViewPixx is not exactly exponential, this function can never provide an accurate linearisation [TODO: Figure with ViewPixx luminance measurement].
 Therefore, `psychopy-pixx` uses many more readings and interpolates them to obtain a more accurate transfer function; the increased calibration time is easily masked by the significantly increased accuracy. Control measurements prove an accuracy of $10^{-12}$ to $10^{-14} \frac{cd}{m^2}$, which corresponds to several thousand brightness levels.
