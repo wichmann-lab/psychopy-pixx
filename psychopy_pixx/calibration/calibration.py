@@ -182,7 +182,7 @@ psychopy.hardware.pr.PR65` or
 @click.option('--inverted', help='Measure in inverted order.', is_flag=True)
 @click.option('--levelspost', help='Number of measurements after linearization', default=100)
 @click.option('--restests', help='Number of test points for luminance resolution', default=5)
-@click.option('--plot', help='Show plots.', is_flag=True)
+@click.option('--plot', is_flag=False, flag_value='.', help='Create, show and save plots.', default='no_plots_8e26a619-e688-4dcf-b010-7bd5fca459d8')
 @click.option('--gamma', help='Gamma with which the monitor is to be corrected. (default: 1.0 (linearization))', type=float, default=1.0)
 @click.option('--measures', help='Number of measurements to average per color level (only S470 photometer).', type=int, default=250)
 @click.option('--savefiles', is_flag=False, flag_value='.', help='save measurements as files, not only in psychopys monitor', default='no_savefile_f99fc889-c6e3-4588-ad44-4f8a9554f7b5')
@@ -315,36 +315,38 @@ savefiles='no_savefile_f99fc889-c6e3-4588-ad44-4f8a9554f7b5', all_measurements=F
         data_file = f"{savefiles}/luminancePost_{date_time}.csv"
         np.savetxt(data_file, data, fmt="%.2f", delimiter=",", header='levels,luminance_gun1,luminance_gun2,luminance_gun3,luminance_gun4') # luminances in cd/m2"
     
-    print("Plot measurements ...")
-    plt.plot(levelsPre, lumsPre[0], label='pre')
-    if levelspost > 0:
-        plt.plot([0, 1], [lumsPre[0, 0], lumsPre[0, -1]], '--', linewidth=3, label='expected')
-        plt.plot(levelsPost, lumsPost[0], label='post')
-    plt.xlabel("Grey Level")
-    plt.ylabel("Luminance [cd/m^2]")
-    plt.legend(loc='best')
-    plt.title(f'Luminance before and after calibration ({photometer.type}, {monitor.currentCalibName})')
-    plot_file = f"{monitor.currentCalibName}_luminance.pdf"
-    print(f"Save plot {plot_file}...")
-    plt.savefig(plot_file)   
-    if not script:
-        plt.show()
+    if plot != 'no_plots_8e26a619-e688-4dcf-b010-7bd5fca459d8':
+        print("Plot measurements ...")
+        plt.plot(levelsPre, lumsPre[0], label='pre')
+        if levelspost > 0:
+            plt.plot([0, 1], [lumsPre[0, 0], lumsPre[0, -1]], '--', linewidth=3, label='expected')
+            plt.plot(levelsPost, lumsPost[0], label='post')
+        plt.xlabel("Grey Level")
+        plt.ylabel("Luminance [cd/m^2]")
+        plt.legend(loc='best')
+        plt.title(f'Luminance before and after calibration ({photometer.type}, {monitor.currentCalibName})')
+        plot_file = f"{plot}/{monitor.currentCalibName}_luminance.pdf"
+        print(f"Save plot {plot_file}...")
+        plt.savefig(plot_file)   
+        if not script: 
+            plt.show()
     
     if restests > 0:
         for lums, levels in zip(monitor.currentCalib['lumsRes'], monitor.currentCalib['levelsRes']):
             lums = lums[0]
             plt.plot(-resoffset[1:], lums[1:] - lums[0], 
                      label=f'{levels[0]:.4f}')
-        plt.xlabel("Log2(grey level difference)")
-        plt.ylabel("Luminance difference")
-        plt.yscale('log', base=2)
-        plt.title(f'Luminance resolution ({photometer.type}, {monitor.currentCalibName})')
-        plt.legend(loc='best', title='Grey level')
-        plot_file = f"{monitor.currentCalibName}_resolution.pdf"
-        print(f"Save plot {plot_file}...")
-        plt.savefig(plot_file)
-        if not script:
-            plt.show()
+        if plot != 'no_plots_8e26a619-e688-4dcf-b010-7bd5fca459d8':
+            plt.xlabel("Log2(grey level difference)")
+            plt.ylabel("Luminance difference")
+            plt.yscale('log', base=2)
+            plt.title(f'Luminance resolution ({photometer.type}, {monitor.currentCalibName})')
+            plt.legend(loc='best', title='Grey level')
+            plot_file = f"{plot}/{monitor.currentCalibName}_resolution.pdf"
+            print(f"Save plot {plot_file}...")
+            plt.savefig(plot_file)
+            if not script:
+                plt.show()
 
     
     print("Done.")
