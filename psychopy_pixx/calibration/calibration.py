@@ -145,9 +145,9 @@ psychopy.hardware.pr.PR65` or
 @click.option('--levelspost', help='Number of measurements after linearization', default=100)
 @click.option('--restests', help='Number of test points for luminance resolution', default=5)
 @click.option('--plot', help='Show plots.', is_flag=True)
-@click.option('--linearize/--no-linearize', help='Do (not) linearize the luminance. Default is linearizing.', default=True)
+@click.option('--gamma', help='Gamma with which the monitor is to be corrected. (default: 1.0 (linearization))', type=float, default=1.0)
 @click.option('--measures', help='Number of measurements to average per color level (only S470 photometer).', type=int, default=250)
-def calibration_routine_cli(levels, monitor, screen, photometer, port, random, levelspost, restests, plot, linearize, measures):
+def calibration_routine_cli(levels, monitor, screen, photometer, port, random, levelspost, restests, plot, measures, gamma=1.0):
     from psychopy import monitors, visual  # lazy import
 
     print(f"Setup monitor {monitor}, search for photometer {photometer} ...")
@@ -205,9 +205,8 @@ def calibration_routine_cli(levels, monitor, screen, photometer, port, random, l
         'random_measures': random,
     }
     
-    if linearize:
-        print("Linearize luminance ...")
-        vpixx.linearize_luminance()
+    print(f'Correct luminance (gamma={gamma}) ...')
+    vpixx.correct_luminance(gamma)
     
     if levelspost > 0:
         print(f"Measure luminances again for validation ...")

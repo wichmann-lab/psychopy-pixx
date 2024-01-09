@@ -43,7 +43,7 @@ class ViewPixx:
         self._setup_shader()
 
     
-    def linearize_luminance(self, assert_register=True):
+    def correct_luminance(self, gamma=1.0, assert_register=True):
         if assert_register:
            try:
                calib_reg = self.window.monitor.currentCalib['viewpixx']['register'] 
@@ -55,7 +55,7 @@ class ViewPixx:
            for k, v in calib_reg.items():
                assert register[k] == v, f"Expects {k}={v}, got {k}={register[k]}"
                 
-        self.shader_clut = interp_clut(self.window.monitor)
+        self.shader_clut = interp_clut(self.window.monitor, gamma)
         
     @property
     def shader_clut(self) -> np.ndarray:
@@ -218,7 +218,7 @@ class ViewPixx:
         self.register = self.window.monitor.currentCalib['viewpixx']['register'] 
     
 
-def interp_clut(monitor):
+def interp_clut(monitor, gamma):
     lums = monitor.getLumsPre()
     levels = monitor.getLevelsPre()
     
@@ -247,7 +247,7 @@ def interp_clut(monitor):
     desired_lums = np.linspace(0, 1, 2**16, endpoint=True)
     desired_levels = np.empty((nguns, len(desired_lums)))
     for gun in range(4):
-        desired_levels[gun, :] = np.interp(x=desired_lums, xp=lums[gun], fp=levels)
+        desired_levels[gun, :] = (np.interp(x=desired_lums, xp=lums[gun], fp=levels))**gamma # = (invertedfunction)**gamma  (if gamma == 1.0 it is just a linearisation)
     return desired_levels
 
                         
