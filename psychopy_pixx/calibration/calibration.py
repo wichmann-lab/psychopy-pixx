@@ -188,9 +188,10 @@ psychopy.hardware.pr.PR65` or
 @click.option('--savefiles', is_flag=False, flag_value='.', help='save measurements as files, not only in psychopys monitor', default='no_savefile_f99fc889-c6e3-4588-ad44-4f8a9554f7b5')
 @click.option('--all_measurements', help='with this option, all measurments from the photometer are saved', is_flag=True)
 @click.option('--script', help='prevents calibration from opening plots and user prompts to be able to use the tool more automated (for pre calibration)', is_flag=True)
+@click.option('--no_scanning', help='with this option you swith from "scanning backlight" to "normal backlight"', is_flag=True)
 @click.option('--lut', help='look up table (lut) the script should use for correction/calibration', is_flag=False, flag_value='.', default='no_lut_f99fc889-c6e3-4588-ad44-4f8a9554f7b5')
 def calibration_routine_cli(levels, monitor, screen, photometer, port, random, inverted, levelspost, restests, plot, measures, gamma=1.0, 
-savefiles='no_savefile_f99fc889-c6e3-4588-ad44-4f8a9554f7b5', all_measurements=False, script=False, lut='no_lut_f99fc889-c6e3-4588-ad44-4f8a9554f7b5'):
+savefiles='no_savefile_f99fc889-c6e3-4588-ad44-4f8a9554f7b5', all_measurements=False, script=False, no_scanning=False, lut='no_lut_f99fc889-c6e3-4588-ad44-4f8a9554f7b5'):
     
     from psychopy import monitors, visual  # lazy import
 
@@ -219,6 +220,7 @@ savefiles='no_savefile_f99fc889-c6e3-4588-ad44-4f8a9554f7b5', all_measurements=F
         fullscr=0, size=monitor_size, gamma=1, units='norm', useFBO=True,
         monitor=monitor, allowGUI=True, winType='pyglet', screen=screen)
     vpixx = ViewPixx(window)
+    vpixx.scanning_backlight = not no_scanning
     
     if not script:
         monitor_state = {
