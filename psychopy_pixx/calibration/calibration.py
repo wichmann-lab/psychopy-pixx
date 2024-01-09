@@ -186,7 +186,10 @@ psychopy.hardware.pr.PR65` or
 @click.option('--measures', help='Number of measurements to average per color level (only S470 photometer).', type=int, default=250)
 @click.option('--savefiles', is_flag=False, flag_value='.', help='save measurements as files, not only in psychopys monitor', default='no_savefile_f99fc889-c6e3-4588-ad44-4f8a9554f7b5')
 @click.option('--all_measurements', help='with this option, all measurments from the photometer are saved', is_flag=True)
-def calibration_routine_cli(levels, monitor, screen, photometer, port, random, inverted, levelspost, restests, plot, measures, gamma=1.0, savefiles='no_savefile_f99fc889-c6e3-4588-ad44-4f8a9554f7b5', all_measurements=False):
+@click.option('--script', help='prevents calibration from opening plots and user prompts to be able to use the tool more automated (for pre calibration)', is_flag=True)
+def calibration_routine_cli(levels, monitor, screen, photometer, port, random, inverted, levelspost, restests, plot, measures, gamma=1.0, 
+savefiles='no_savefile_f99fc889-c6e3-4588-ad44-4f8a9554f7b5', all_measurements=False, script=False):
+    
     from psychopy import monitors, visual  # lazy import
 
     # check if paths exist
@@ -215,13 +218,14 @@ def calibration_routine_cli(levels, monitor, screen, photometer, port, random, i
         monitor=monitor, allowGUI=True, winType='pyglet', screen=screen)
     vpixx = ViewPixx(window)
     
-    monitor_state = {
-        'Width': monitor.getWidth(), 
-        'Distance': monitor.getDistance(),
-        'SizePix': monitor_size,
-        **vpixx.register}
-    register_str = "\n".join(f"\t{key}: {val}" for key, val in monitor_state.items())
-    click.confirm(f'This is your monitor state. Ok?\n{register_str}\n' , abort=True)
+    if not script:
+        monitor_state = {
+            'Width': monitor.getWidth(), 
+            'Distance': monitor.getDistance(),
+            'SizePix': monitor_size,
+            **vpixx.register}
+        register_str = "\n".join(f"\t{key}: {val}" for key, val in monitor_state.items())
+        click.confirm(f'This is your monitor state. Ok?\n{register_str}\n' , abort=True)
 
     measure_kwargs = dict(window=window, photometer=photometer, random=random, inverted=inverted,
                           allGuns=False, n_measures=measures)
@@ -237,7 +241,8 @@ def calibration_routine_cli(levels, monitor, screen, photometer, port, random, i
             date_time = datetime.now().strftime("%Y-%m-%d_%H-%M")        # save date and time for file distinction
             data_file = f"{savefiles}/blackwhiteLums_{date_time}.csv"
             np.savetxt(data_file, data, fmt="%.2f", delimiter=",", header='levels,luminance_gun1,luminance_gun2,luminance_gun3,luminance_gun4') # luminances in cd/m2"
-    click.confirm(f'Your monitor shows {minLum:.2f} cd/m^2 to {maxLum:.2f} cd/m^2. Ok?', abort=True)
+    if not script:
+        click.confirm(f'Your monitor shows {minLum:.2f} cd/m^2 to {maxLum:.2f} cd/m^2. Ok?', abort=True)
     
     # measurements
     print(f"Measure luminance series ...")
@@ -311,8 +316,8 @@ def calibration_routine_cli(levels, monitor, screen, photometer, port, random, i
     plot_file = f"{monitor.currentCalibName}_luminance.pdf"
     print(f"Save plot {plot_file}...")
     plt.savefig(plot_file)   
-    if plot: 
-        plt.show()  
+    if not script:
+        plt.show()
     
     if restests > 0:
         for lums, levels in zip(monitor.currentCalib['lumsRes'], monitor.currentCalib['levelsRes']):
@@ -327,8 +332,8 @@ def calibration_routine_cli(levels, monitor, screen, photometer, port, random, i
         plot_file = f"{monitor.currentCalibName}_resolution.pdf"
         print(f"Save plot {plot_file}...")
         plt.savefig(plot_file)
-        if plot:
-            plt.show()  
+        if not script:
+            plt.show()
 
     
     print("Done.")
