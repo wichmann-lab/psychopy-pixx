@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import csv
 import os
 from datetime import datetime
+import pandas as pd
 
 from psychopy_pixx.calibration.photometer import findPhotometer
 from psychopy_pixx.devices import ViewPixx
@@ -187,8 +188,9 @@ psychopy.hardware.pr.PR65` or
 @click.option('--savefiles', is_flag=False, flag_value='.', help='save measurements as files, not only in psychopys monitor', default='no_savefile_f99fc889-c6e3-4588-ad44-4f8a9554f7b5')
 @click.option('--all_measurements', help='with this option, all measurments from the photometer are saved', is_flag=True)
 @click.option('--script', help='prevents calibration from opening plots and user prompts to be able to use the tool more automated (for pre calibration)', is_flag=True)
+@click.option('--lut', help='look up table (lut) the script should use for correction/calibration', is_flag=False, flag_value='.', default='no_lut_f99fc889-c6e3-4588-ad44-4f8a9554f7b5')
 def calibration_routine_cli(levels, monitor, screen, photometer, port, random, inverted, levelspost, restests, plot, measures, gamma=1.0, 
-savefiles='no_savefile_f99fc889-c6e3-4588-ad44-4f8a9554f7b5', all_measurements=False, script=False):
+savefiles='no_savefile_f99fc889-c6e3-4588-ad44-4f8a9554f7b5', all_measurements=False, script=False, lut='no_lut_f99fc889-c6e3-4588-ad44-4f8a9554f7b5'):
     
     from psychopy import monitors, visual  # lazy import
 
@@ -255,6 +257,15 @@ savefiles='no_savefile_f99fc889-c6e3-4588-ad44-4f8a9554f7b5', all_measurements=F
         date_time = datetime.now().strftime("%Y-%m-%d_%H-%M")        # save date and time for file distinction
         data_file = f"{savefiles}/luminancePre_{date_time}.csv"
         np.savetxt(data_file, data, fmt="%.2f", delimiter=",", header='levels,luminance_gun1,luminance_gun2,luminance_gun3,luminance_gun4') # luminances in cd/m2"
+
+    #try to set pretrained lut
+    if lut != 'no_lut_f99fc889-c6e3-4588-ad44-4f8a9554f7b5':
+        lut = pd.read_csv(lut)
+        lut = lut.sort_values(by='levels')
+        print(lut)
+        levelsPre = lut['levels'].values
+        print(levelsPre)
+        lumsPre = np.array([lut['prediciton'].values, lut['prediciton'].values, lut['prediciton'].values, lut['prediciton'].values])
     
     print("Create new monitor calibration.")
     monitor.newCalib(width=monitor.getWidth(), distance=monitor.getDistance())
