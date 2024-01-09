@@ -206,6 +206,7 @@ def calibration_routine_cli(levels, monitor, screen, photometer, port, random, i
     if photometer is None:
         raise ValueError('Photometer not found. You might specify (another) port or name.')
     
+    # monitor setup
     monitor_size = monitor.getSizePix()
     if monitor_size is None:
         raise ValueError("No monitor size defined. Please setup monitor in psychopy's monitor center.")
@@ -274,7 +275,7 @@ def calibration_routine_cli(levels, monitor, screen, photometer, port, random, i
     if levelspost > 0:
         print(f"Measure luminances again for validation ...")
         levelsPost = np.linspace(0, 1, levelspost, endpoint=True)
-        lumsPost = measure_luminances(levelsPost, **measure_kwargs)
+        lumsPost = measure_luminances(levelsPost, **measure_kwargs_realMeasurment)
         monitor.setLumsPost(lumsPost)
         monitor.setLevelsPost(levelsPost)
 
@@ -283,7 +284,7 @@ def calibration_routine_cli(levels, monitor, screen, photometer, port, random, i
         reslevels = np.linspace(0, 1, restests, endpoint=False)
         resoffset = np.r_[np.inf, np.arange(14, 6 - 1, -1).astype(float)]
         reslevels = reslevels.reshape(-1, 1) + 2**-resoffset.reshape(1, -1)
-        reslums = measure_luminances(reslevels.ravel(), **measure_kwargs)
+        reslums = measure_luminances(reslevels.ravel(), **measure_kwargs_realMeasurment)
         reslums = reslums.reshape(4, reslevels.shape[0], reslevels.shape[1]).transpose(1, 0, 2)
         monitor.currentCalib['lumsRes'] = reslums
         monitor.currentCalib['levelsRes'] = reslevels
