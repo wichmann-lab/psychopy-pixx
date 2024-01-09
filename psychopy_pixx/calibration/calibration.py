@@ -15,6 +15,7 @@ def measure_luminances(
     allGuns=True,
     autoMode='auto',
     random=False,
+    inverted=False,
     stimSize=4,
     n_measures=50):
     """Automatically measures a series of gun values and measures
@@ -72,9 +73,14 @@ psychopy.hardware.pr.PR65` or
     if photometer.type == 'S470' and n_measures is not None:
         photometer.n_repeat = n_measures
 
-    if random:
+    if random and inverted:
+        print(f'ERROR: you can not set both random={random} and inverted={inverted}!')
+        return 1
+    if random and not inverted:
         shuffled_index = np.random.permutation(len(levels))
         toTest = levels[shuffled_index]
+    elif not random and inverted:
+        toTest = levels[::-1] 
     else:
         toTest = levels
 
@@ -142,12 +148,13 @@ psychopy.hardware.pr.PR65` or
 @click.option('-p', '--photometer', required=True, help='photometer name supported by psychopy')
 @click.option('--port', help='Port of the photometer', default=None)
 @click.option('--random', help='Measure in randomized order.', is_flag=True)
+@click.option('--inverted', help='Measure in inverted order.', is_flag=True)
 @click.option('--levelspost', help='Number of measurements after linearization', default=100)
 @click.option('--restests', help='Number of test points for luminance resolution', default=5)
 @click.option('--plot', help='Show plots.', is_flag=True)
 @click.option('--gamma', help='Gamma with which the monitor is to be corrected. (default: 1.0 (linearization))', type=float, default=1.0)
 @click.option('--measures', help='Number of measurements to average per color level (only S470 photometer).', type=int, default=250)
-def calibration_routine_cli(levels, monitor, screen, photometer, port, random, levelspost, restests, plot, measures, gamma=1.0):
+def calibration_routine_cli(levels, monitor, screen, photometer, port, random, inverted, levelspost, restests, plot, measures, gamma=1.0):
     from psychopy import monitors, visual  # lazy import
 
     print(f"Setup monitor {monitor}, search for photometer {photometer} ...")
@@ -172,7 +179,7 @@ def calibration_routine_cli(levels, monitor, screen, photometer, port, random, l
     register_str = "\n".join(f"\t{key}: {val}" for key, val in monitor_state.items())
     click.confirm(f'This is your monitor state. Ok?\n{register_str}\n' , abort=True)
 
-    measure_kwargs = dict(window=window, photometer=photometer, random=random,
+    measure_kwargs = dict(window=window, photometer=photometer, random=random, inverted=inverted,
                           allGuns=False, n_measures=measures)
     print(f"Measure a few black and white screens ...")
     blackwhiteLums = measure_luminances(np.array([1, 1, 1 , 0, 0, 0]), **measure_kwargs)[0]
