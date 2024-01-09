@@ -3,6 +3,9 @@ import time
 import numpy as np
 import click
 import matplotlib.pyplot as plt
+import csv
+import os
+from datetime import datetime
 
 from psychopy_pixx.calibration.photometer import findPhotometer
 from psychopy_pixx.devices import ViewPixx
@@ -17,7 +20,9 @@ def measure_luminances(
     random=False,
     inverted=False,
     stimSize=4,
-    n_measures=50):
+    n_measures=50,
+    all_measurements=False,
+    savefiles='no_savefile_f99fc889-c6e3-4588-ad44-4f8a9554f7b5'):
     """Automatically measures a series of gun values and measures
     the luminance with a photometer.
     
@@ -61,6 +66,8 @@ psychopy.hardware.pr.PR65` or
                                  sf=[window.clientSize[0] / 512.0, window.clientSize[1] / 512.0])
     testPatch = visual.PatchStim(window, tex='sqr', size=stimSize,
                                  color=initRGB, units='norm')
+    
+    date_time = datetime.now().strftime("%Y-%m-%d_%H-%M") # save date and time for file distinction
 
     if autoMode != 'semi':
         message.setText('Q to quit at any time')
@@ -90,6 +97,22 @@ psychopy.hardware.pr.PR65` or
         guns = [0]
     # this will hold the measured luminance values
     lumsList = np.zeros((4, len(toTest)))
+
+    # create list for logging all measurments
+    if all_measurements:
+        allLums_data = []
+
+    # prepare logging
+    if all_measurements and savefiles!='no_savefile_f99fc889-c6e3-4588-ad44-4f8a9554f7b5':
+
+        data_file = f"{savefiles}/allMeasurments{date_time}.csv"
+        writer = csv.writer(open(data_file, 'w'))
+        # create header
+        header = ['levels']
+        for i in range(1, n_measures + 1):
+            header.append(f'measurement_{i:03}')
+        writer.writerow(header)
+
     # for each gun, for each value run test
     for gun in guns:
         for valN, DACval in enumerate(toTest):
@@ -115,7 +138,11 @@ psychopy.hardware.pr.PR65` or
 
             # take measurement
             if autoMode == 'auto':
-                actualLum = photometer.getLum()
+                if all_measurements:
+                    actualLum, lums = photometer.getLum(return_all=True)
+                    allLums_data.append([DACval] + lums)
+                else:
+                    actualLum = photometer.getLum()
                 print(f"\t{valN + 1}/{len(toTest)} At DAC value {DACval:.2f}\t: {actualLum:.2f}cd/m^2")
                 lumsList[gun, valN] = actualLum
                 # check for quit request
@@ -136,6 +163,9 @@ psychopy.hardware.pr.PR65` or
                         elif thisKey in (' ', 'space'):
                             done = True
 
+            if all_measurements and savefiles!='no_savefile_f99fc889-c6e3-4588-ad44-4f8a9554f7b5':
+                writer.writerow(allLums_data[-1])
+
     if random:  # revert shuffling
         lumsList = lumsList[:, shuffled_index.argsort()]
     return lumsList
@@ -154,8 +184,21 @@ psychopy.hardware.pr.PR65` or
 @click.option('--plot', help='Show plots.', is_flag=True)
 @click.option('--gamma', help='Gamma with which the monitor is to be corrected. (default: 1.0 (linearization))', type=float, default=1.0)
 @click.option('--measures', help='Number of measurements to average per color level (only S470 photometer).', type=int, default=250)
-def calibration_routine_cli(levels, monitor, screen, photometer, port, random, inverted, levelspost, restests, plot, measures, gamma=1.0):
+@click.option('--savefiles', is_flag=False, flag_value='.', help='save measurements as files, not only in psychopys monitor', default='no_savefile_f99fc889-c6e3-4588-ad44-4f8a9554f7b5')
+@click.option('--all_measurements', help='with this option, all measurments from the photometer are saved', is_flag=True)
+def calibration_routine_cli(levels, monitor, screen, photometer, port, random, inverted, levelspost, restests, plot, measures, gamma=1.0, savefiles='no_savefile_f99fc889-c6e3-4588-ad44-4f8a9554f7b5', all_measurements=False):
     from psychopy import monitors, visual  # lazy import
+
+    # check if paths exist
+    # Note: I have to use the string with the uuid as control, so if the option is not set, I dont log/plot
+    if savefiles!='no_savefile_f99fc889-c6e3-4588-ad44-4f8a9554f7b5':
+        if not os.path.isdir(savefiles):
+            print(f'ERROR: "{savefiles}" is no valide directory')
+            return 1
+    if plot!='no_plots_8e26a619-e688-4dcf-b010-7bd5fca459d8':
+        if not os.path.isdir(savefiles):
+            print(f'ERROR: "{plot}" is no valide directory')
+            return 1
 
     print(f"Setup monitor {monitor}, search for photometer {photometer} ...")
     monitor = monitors.Monitor(monitor)
@@ -188,11 +231,24 @@ def calibration_routine_cli(levels, monitor, screen, photometer, port, random, i
         or blackwhiteLums[3:].max() - blackwhiteLums[3:].min() > 0.1):
         raise ValueError(f"Black / white measurements are quite differerent."
                          f"Probably something is wrong.  {blackwhiteLums}")
+    if savefiles!='no_savefile_f99fc889-c6e3-4588-ad44-4f8a9554f7b5':
+            data = np.vstack((100*np.array([1, 1, 1 , 0, 0, 0]), blackwhiteLums)).T
+            date_time = datetime.now().strftime("%Y-%m-%d_%H-%M")        # save date and time for file distinction
+            data_file = f"{savefiles}/blackwhiteLums_{date_time}.csv"
+            np.savetxt(data_file, data, fmt="%.2f", delimiter=",", header='levels,luminance_gun1,luminance_gun2,luminance_gun3,luminance_gun4') # luminances in cd/m2"
     click.confirm(f'Your monitor shows {minLum:.2f} cd/m^2 to {maxLum:.2f} cd/m^2. Ok?', abort=True)
     
+    # measurements
     print(f"Measure luminance series ...")
     levelsPre = np.linspace(0, 1, levels, endpoint=True)
-    lumsPre = measure_luminances(levelsPre, **measure_kwargs)
+    measure_kwargs_realMeasurment = dict(window=window, photometer=photometer, random=random, inverted=inverted,
+                          allGuns=False, n_measures=measures, all_measurements=all_measurements, savefiles=savefiles)
+    lumsPre = measure_luminances(levelsPre, **measure_kwargs_realMeasurment)
+    if savefiles!='no_savefile_f99fc889-c6e3-4588-ad44-4f8a9554f7b5':
+        data = np.vstack((100*levelsPre, lumsPre)).T   # percent for better accuracy, all 4 post guns
+        date_time = datetime.now().strftime("%Y-%m-%d_%H-%M")        # save date and time for file distinction
+        data_file = f"{savefiles}/luminancePre_{date_time}.csv"
+        np.savetxt(data_file, data, fmt="%.2f", delimiter=",", header='levels,luminance_gun1,luminance_gun2,luminance_gun3,luminance_gun4') # luminances in cd/m2"
     
     print("Create new monitor calibration.")
     monitor.newCalib(width=monitor.getWidth(), distance=monitor.getDistance())
@@ -236,6 +292,11 @@ def calibration_routine_cli(levels, monitor, screen, photometer, port, random, i
     print("Save new monitor calibration ...")
     monitor.save()
     window.close()
+    if savefiles!='no_savefile_f99fc889-c6e3-4588-ad44-4f8a9554f7b5' and levelspost > 0:
+        data = np.vstack((100*levelsPost, lumsPost)).T    # percent for better accuracy, all 4 post guns
+        date_time = datetime.now().strftime("%Y-%m-%d_%H-%M")        # save date and time for file distinction
+        data_file = f"{savefiles}/luminancePost_{date_time}.csv"
+        np.savetxt(data_file, data, fmt="%.2f", delimiter=",", header='levels,luminance_gun1,luminance_gun2,luminance_gun3,luminance_gun4') # luminances in cd/m2"
     
     print("Plot measurements ...")
     plt.plot(levelsPre, lumsPre[0], label='pre')
