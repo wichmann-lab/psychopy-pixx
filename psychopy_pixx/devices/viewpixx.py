@@ -226,7 +226,10 @@ def interp_clut(monitor, gamma):
         raise ValueError(f"Expects matching levels and luminances,\n"
                          f"got {levels.shape} != {lums.shape}.")
     
-    lums = (lums - lums[:, [0]]) / (lums[:, [-1]] - lums[:, [0]] + 1e-8)
+    lums_normalized = []
+    for l in lums:
+        lums_normalized.append(np.interp(l, (l.min(), l.max()), (0, 1)))
+    lums = np.asarray(lums_normalized)
     
     is_lum_incr = np.all(np.diff(lums) >= 0, axis=0)  # all guns have to be increasing
     if not np.all(is_lum_incr):
