@@ -80,8 +80,10 @@ The second measurement, after linearization, shows a linear relation between gre
 ![Plot of luminance per grey level](images/example_luminance.png)
 
 #### Luminance resolution
-Besides luminance linearity, we are also interested in the luminance resolution--how many different grey levels the monitor can show. A standard monitor uses 8-bit pixel data and can show up to 256 different shades of grey, while our Viewpixx in high luminance-resolution mode (*M16*) uses 16-bit data and thus up to 65.536 grey levels. In practice, the resolution is lower and can be measured by the luminance of tiny grey level differences. 
-The just measurable luminance difference describes our resolution; here we see 11-bit (about 2.000 grey levels) for some grey levels and even more for others. For every line, we picked a base-level $x_0$ and add tiny but increasing differences, $x_i = x_0 + 2^-i$. Then we measured the base luminance $lum(x_0)$ and luminances $lum(x_{14})$ to $lum(x_6)$. The plot shows the grey level difference $i$ againt the the luminance increase $lum(x_i) - lum(x_0)$. Linearized luminance should show line in the log-log-plot for a reasonable offset. 
+Besides luminance linearity, we are also interested in the luminance resolution--the minimal grey level difference that the monitor can show. A standard monitor uses 8-bit pixel data and can show up to 256 different shades of grey (we call this "8-bit resolution")
+Lab monitors like the Viewpixx in high luminance-resolution mode (*M16*) can show up to $2^12$ different shades of grey, depending on monitor specs ("10-bit resolution" / "12-bit resolution"). We can verify these specs by measuring tiny increments in luminance, assuming that our photometer is accurate enough. 
+
+The figure shows such a measurement for our monitor. The minimal luminance increment depends on the absolute brightness but is about 11-bit (about 2.000 grey levels). For every line, we picked a base-level $x_0$ and added tiny but increasing differences, $x_i = x_0 + 2^{-i}$. Then we measured the base luminance $lum(x_0)$ and luminances $lum(x_{14})$ to $lum(x_6)$, as most monitors are in the range of 8 to 12 bit. The plot shows the change in luminance $lum(x_i) - lum(x_0)$ for each grey level difference $i$. If the luminance was linearized, the luminance by the level plot shows a line; the x-position where this line drops to zero indicates our luminance resolution.
 
 
 ![Plot of luminance difference per tiny grey level difference](images/example_resolution.png)
