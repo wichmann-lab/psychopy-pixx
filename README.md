@@ -101,7 +101,8 @@ The ViewPixx class patches Psychopy's window rendering for the ViewPixx high lum
 * `mode='C48'`: 16-bit color mode (merges two input pixels).
 
 The high-bit modes require high-resolution luminance linearization, not provided by Psychopy.
-First, disable Psychopy's gamma-linearization (`Window(gamma=1)`),  then use our interpolation-based linearization. The linearization requires the luminance measurements from the monitor's current calibration file. Additionally, our linearization function asserts that the monitor's current state equals the state during calibration and throws an error otherwise. 
+First, disable Psychopy's gamma-linearization (`Window(gamma=1)`),  then use our interpolation-based linearization. The linearization requires the luminance measurements from the monitor's current calibration file. Additionally, our linearization function asserts that the monitor's current state equals the state during calibration and throws an error otherwise.
+
 
 ```python
 # Before Experiment
@@ -120,6 +121,22 @@ In case you want to forcefully set the monitor register to the state during cali
 # In separate setup script
 vpixx.use_calibration_register()  # now wait for 20-30 minutes!
 ```
+
+#### Builder Component
+The Viewpixx routine sets up a ViewPixx monitor. It should be used as the first routine of an experiment.
+
+name : string
+
+* Everything in a PsychoPy® experiment needs a unique name. The name should contain only letters, numbers and underscores (no punctuation marks or spaces).
+
+video mode : choice
+
+* The video mode of the Viewpixx monitor.
+
+scanning back light : bool
+
+* If this box is checked the scanning backlight will be turned on.
+
 
 ### ResponsePixx Button-Box
 
@@ -159,6 +176,36 @@ currentLoop.addData('resp.rt', last_resp['time'])
 ```
 
 Please note that time in the events is relative to the *start* call and measured with the clock in the Viewpixx device, and there is no sync between this device clock and the frames shown by psychopy. Be careful if you rely on exact time measurements because both clocks *could* deviate during long routines. 
+
+#### Builder Component
+The Responsepixx Component in the builder can be used to record button clicks of the Buttonbox. For this the a Viewpixx monitor has to be set up with the set up routine (see above).
+
+name : string
+
+* Everything in a PsychoPy® experiment needs a unique name. The name should contain only letters, numbers and underscores (no punctuation marks or spaces).
+
+start : float
+
+* The time that the buttonbox should first be checked. See [Defining the onset/duration of psychopy components](https://psychopy.org/builder/startStop.html#startstop) for details.
+
+stop : float
+
+* When the buttonbox is no longer checked. See [Defining the onset/duration of psychopy components](https://psychopy.org/builder/startStop.html#startstop) for details.
+
+Force End Routine on Press : bool
+
+* If this box is checked then the Routine will end as soon as one of the valid buttons is pressed.
+
+Button lights : bool
+
+* If this box is checked the lights of the valid buttons will be turned on
+
+_color button_ : bool
+
+* If a box is checked the correspondingly colored button is valid and will be recorded.
+
+
+
 
 ## Development
 
