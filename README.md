@@ -12,13 +12,13 @@ This high-bit luminance mode requires features currently not included in Psychop
 ## Installation
 
 The easiest way to install *psychopy-pixx* is the Psychopy Plugin Manager (from Psychopy v2023.1.0). 
-In Psychopy, click on `Tools > Plugins`, the search *psychopy-pixx* and click `install`. 
+In Psychopy, click on `Tools > Plugins`, search *psychopy-pixx*, and click `install`. 
 
 Afterwards, assure that `pypixxlib`, a proprietary library that comes with your VPixx Technology devices is installed to the same python environment (see below).
 
 ## Manual setup
 
-If you prefer setting up* psychopy-pixx* without the plugin manager, you can install `psychopy-pixx` as a python package yourself.
+If you prefer setting up *psychopy-pixx* without the plugin manager, you can install `psychopy-pixx` as a python package yourself.
 In addition, some proprietary software for VPixx Technology devices require a manual installation.
 
 1. Install psychopy
